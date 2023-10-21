@@ -29,11 +29,28 @@ app.put('/api/livro/:id', (req, res) => {
 
         const data = livros.find(item => item.id == id) || null
 
-        if (!data)
-            res.status(404).send("Livro não exsite")
+        if (!data) res.status(404).send("Livro não exsite")
 
         data.name = req.body.name
         res.status(201).send("Livro Atualizado")
+    } catch (error) {
+        res.status(500).send(`${error}`)
+    }
+})
+
+app.delete('/api/livros/:id', (req, res) => {
+    try {
+        const { id } = req.params || null
+
+        if (!id) throw new Error("Informe um id válido")
+
+        const data = livros.findIndex(item => item.id == id)
+
+        if (data >= 0) {
+            livros.splice(data, 1)
+            res.status(204).send()
+        }
+        res.status(404).send("Livro não existe")
     } catch (error) {
         res.status(500).send(`${error}`)
     }
