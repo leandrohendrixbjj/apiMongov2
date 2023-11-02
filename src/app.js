@@ -16,6 +16,24 @@ app.get('/api/livros', (req, res) => {
     res.status(200).json(livros)
 })
 
+app.get('/api/livro/:id', (req, res) => {
+    try {
+        const { id } = req.params
+        if (!id) throw new Error("Informe um id válido")
+
+        const data = livros.find(livro => livro.id == id) || null
+
+        if (data)
+            res.status(200).json(data)
+
+        if (!data)
+            res.status(404).send("Livro não exsite")
+    } catch (error) {
+        res.status(500).send(`${error}`)
+    }
+
+})
+
 app.post('/api/livros', (req, res) => {
     livros.push(req.body)
     res.status(201).send("Livro cadastrado com sucesso!")
