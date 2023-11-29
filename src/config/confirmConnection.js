@@ -1,16 +1,16 @@
-import dbConnect from './dbConnect.js';
+import databaseConection from './databaseConection.js';
 
 try {
 
-    dbConnect.on("error", () => {
-        console.log.bind(console, 'Error on database connection')
+    databaseConection.on("error", () => {
+        console.log.bind(console, 'Error on Database connection')
     })
 
-    dbConnect.once("open", () => {
-        console.log('Connection was made successfully');
+    databaseConection.once("open", () => {
+        console.log('Database conected successfully');
     });
 } catch (err) {
-    console.log(`Error on connect: ${err}`);
+    console.log(`Error on Database conection: ${err}`);
 }
 
-export default dbConnect;
+export default databaseConection;
