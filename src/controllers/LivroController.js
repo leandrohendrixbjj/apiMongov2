@@ -29,12 +29,8 @@ class LivroController {
 
   static async create(req, res) {
     try {
-      //const livro = new Livro(req.body)
       const storeLivro = await Livro.create(req.body)
-      res.status(201).json({ success: true })
-      // livro.save()
-      //   .then((livro) => res.status(201).json({ success: true, data: livro }))
-      //   .catch(error => res.status(500).json({ success: false, message: error.message }))
+      res.status(201).json({ success: true, data: storeLivro })
     } catch (error) {
       console.log(error)
       res.status(500).json({ success: false, message: error })
