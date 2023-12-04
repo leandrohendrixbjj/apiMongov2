@@ -3,7 +3,7 @@ import Livro from '../model/Livro.js'
 class LivroController {
   static async list(req, res) {
     try {
-      const data = await Livro.find({})
+      const data = await Livro.find({}).sort({ _id: -1 })
       if (!data) res.status(404).json({})
       res.status(200).json(data)
     } catch (error) {
@@ -29,14 +29,15 @@ class LivroController {
 
   static async create(req, res) {
     try {
-      const livro = new Livro(req.body)
-
-      livro.save()
-        .then((livro) => res.status(201).json({ success: true, data: livro }))
-        .catch(error => res.status(500).json({ success: false, message: error.message }))
+      //const livro = new Livro(req.body)
+      const storeLivro = await Livro.create(req.body)
+      res.status(201).json({ success: true })
+      // livro.save()
+      //   .then((livro) => res.status(201).json({ success: true, data: livro }))
+      //   .catch(error => res.status(500).json({ success: false, message: error.message }))
     } catch (error) {
       console.log(error)
-      res.status(500).json({ message: error })
+      res.status(500).json({ success: false, message: error })
     }
   }
 
