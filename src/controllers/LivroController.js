@@ -43,8 +43,8 @@ class LivroController {
 
       if (!id) res.status(404).json({})
 
-      Livro.findByIdAndUpdate(id, { $set: req.body })
-        .then(() => res.status(200).json({ success: true, data: req.body }))
+      await Livro.findByIdAndUpdate(id, { $set: req.body })
+        .then(() => res.status(200).json({ success: true }))
         .catch(error => res.status(500).json({ success: false, error: error.message }))
 
     } catch (error) {
