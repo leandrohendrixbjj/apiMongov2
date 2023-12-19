@@ -1,39 +1,46 @@
 import Livro from '../model/Livro.js'
 
 class LivroController {
+
   static async list(req, res) {
     try {
       const data = await Livro.find({}).sort({ _id: -1 })
-      if (!data) res.status(404).json({})
-      res.status(200).json(data)
+
+      if (!data) {
+        res.status(404).json({ success: false })
+      }
+
+      res.status(200).json({ success: true, data })
     } catch (error) {
       console.log(error);
-      res.status(500).json({ message: error })
+      res.status(500).json({ success: false, message: 'Falha na listagem dos livros' })
     }
   }
 
   static async findOne(req, res) {
     try {
       const { id } = req.params
-      if (!id) throw new Error("Informe um id válido")
 
-      Livro.findById(id)
-        .then(livro => res.json({ sucess: true, data: livro }))
-        .catch(error => res.status(404).json({ success: false, message: error.message }));
+      const data = await Livro.findById(id)
 
+      if (!data) {
+        req.status(404).json({ success: false })
+      }
+
+      res.status(200).json({ success: true, data })
     } catch (error) {
       console.log(error)
-      res.status(404).json()
+      res.status(404).json({ success: false, message: 'Falha na busca do livro' })
     }
   }
 
   static async create(req, res) {
     try {
-      const storeLivro = await Livro.create(req.body)
-      res.status(201).json({ success: true, data: storeLivro })
+      await Livro.create(req.body)
+      res.status(201).json({ success: true })
     } catch (error) {
       console.log(error)
-      res.status(500).json({ success: false, message: error })
+      res.status(500).json({ success: false, message: 'Falha no cadastro do livro' })
     }
   }
 
@@ -41,14 +48,16 @@ class LivroController {
     try {
       const { id } = req.params || null
 
-      if (!id) res.status(404).json({})
+      if (!id) {
+        res.status(404).json({})
+      }
 
       await Livro.findByIdAndUpdate(id, { $set: req.body })
-        .then(() => res.status(200).json({ success: true }))
-        .catch(error => res.status(500).json({ success: false, error: error.message }))
 
+      res.status(200).json({ success: true })
     } catch (error) {
-      res.status(500).send(`${error}`)
+      console.log(error)
+      res.status(500).json({ success: false, message: 'Falha na edição do item' })
     }
   }
 
@@ -56,13 +65,18 @@ class LivroController {
     try {
       const { id } = req.params
 
-      if (!id) throw new Error("Informe um id válido")
+      const data = Livro.findById(id)
 
-      Livro.findOneAndDelete(id)
-        .then(() => res.status(204).json({}))
-        .catch(error => res.status(500).json({ success: false, message: error.message }))
+      if (!data) {
+        res.status(404).json({ success: false })
+      }
+
+      await Livro.findOneAndDelete(id)
+
+      res.status(200).json({ success: true })
     } catch (error) {
-      res.status(500).send(`${error}`)
+      console.log(error);
+      res.status(500).json({ success: false })
     }
   }
 }
