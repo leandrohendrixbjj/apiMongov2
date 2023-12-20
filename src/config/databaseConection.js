@@ -1,6 +1,9 @@
 import mongoose from "mongoose";
+import 'dotenv/config'
 
-mongoose.connect("mongodb://localhost:27017/alura-node");
+const STR_CONNECTION = process.env.CONNECTION
+
+mongoose.connect(STR_CONNECTION);
 
 const databaseConection = mongoose.connection
 
