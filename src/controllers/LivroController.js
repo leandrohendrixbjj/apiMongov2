@@ -85,6 +85,25 @@ class LivroController {
       res.status(500).json({ success: false })
     }
   }
+
+  static async findBookByEditora(req, res) {
+    try {
+      const { editora } = req.query || null
+
+      if (!editora) {
+        res.status(404).json({ success: false })
+      }
+
+      const data = await Livro.find({ editora: 
+        { $regex: `${editora}`, $options: 'i' } }).sort({ _id: -1 })
+
+      res.status(200).json({ success: true, data })
+
+    } catch (error) {
+      console.log(error)
+      res.status(500).json({ success: false, message: 'Falha na busca por editora' })
+    }
+  }
 }
 
 export default LivroController
