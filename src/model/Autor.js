@@ -6,6 +6,6 @@ const autorSchema = new mongoose.Schema({
     origem: { type: String }
 }, { versionKey: false });
 
-const autor = mongoose.model("autores", autorSchema)
+const Autor = mongoose.model("autores", autorSchema)
 
-export default autor
+export { Autor, autorSchema }

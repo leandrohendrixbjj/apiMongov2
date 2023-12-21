@@ -1,4 +1,5 @@
 import Livro from '../model/Livro.js'
+import { Autor } from '../model/Autor.js'
 
 class LivroController {
 
@@ -36,6 +37,11 @@ class LivroController {
 
   static async create(req, res) {
     try {
+      const { autor: id } = req.body
+      const dataAutor = await Autor.findById(id)
+
+      Object.assign(req.body, { autor: { ...dataAutor._doc } })
+
       await Livro.create(req.body)
       res.status(201).json({ success: true })
     } catch (error) {
